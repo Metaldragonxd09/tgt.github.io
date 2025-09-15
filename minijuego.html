@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minijuego Sorpresa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrolling */
+        }
+        #game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #b32aff 0%, #4ac9d6 100%);
+        }
+        #zenCanvas {
+            border: 2px solid #a3e635; /* Green border */
+            background-color: #fef08a; /* Sand-like color */
+            cursor: crosshair;
+            touch-action: none; /* Prevent browser default touch actions */
+            border-radius: 0.75rem; /* rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .draggable-rock {
+            cursor: grab;
+            position: absolute;
+            background-color: #9ca3af; /* Gray rock color */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: transform 0.1s ease-out; /* Smooth movement */
+        }
+        .draggable-rock.small {
+            width: 50px;
+            height: 50px;
+        }
+        .draggable-rock.medium {
+            width: 70px;
+            height: 70px;
+            background-color: #6b7280;
+        }
+        .draggable-rock.large {
+            width: 90px;
+            height: 90px;
+            background-color: #4b5563;
+        }
+        .draggable-rock:active {
+            cursor: grabbing;
+            transform: scale(1.05);
+        }
+        .message-box-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .message-box {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+        }
+
+        .message-box h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+
+        .message-box p {
+            font-size: 1rem;
+            color: #4b5563;
+            margin-bottom: 1.5rem;
+        }
+
+        .message-box button {
+            background-color: #22c55e;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        .message-box button:hover {
+            background-color: #16a34a;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container" class="w-full h-full flex flex-col items-center justify-center p-4">
+        <h1 class="text-4xl font-bold text-green-700 mb-6 text-center">Jardín Zen Virtual 🌱</h1>
+        <p class="text-lg text-gray-600 mb-8 text-center max-w-2xl">
+            Relájate dibujando patrones en la arena. Usa el mouse para dibujar .
+        </p>
+</br>
+        <div id="canvas-area" class="relative bg-white rounded-xl shadow-lg p-4 flex flex-col items-center">
+            <canvas id="zenCanvas" class="w-full max-w-4xl aspect-video"></canvas>
+            <div id="rock-palette" class="flex flex-wrap justify-center gap-4 mt-6">
+                <button id="addSmallRock" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200 flex items-center gap-2">
+                    <i class="fas fa-gem"></i> Roca Pequeña
+                </button>
+                <button id="addMediumRock" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200 flex items-center gap-2">
+                    <i class="fas fa-mountain"></i> Roca Mediana
+                </button>
+                <button id="addLargeRock" class="bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200 flex items-center gap-2">
+                    <i class="fas fa-mountain"></i> Roca Grande
+                </button>
+                <button id="clearCanvas" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200 flex items-center gap-2">
+                    <i class="fas fa-eraser"></i> Limpiar Arena
+                </button>
+                <button id="resetGarden" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200 flex items-center gap-2">
+                    <i class="fas fa-redo-alt"></i> Reiniciar Jardín
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="messageBoxOverlay" class="message-box-overlay hidden">
+        <div class="message-box">
+            <h3 id="messageBoxTitle"></h3>
+            <p id="messageBoxContent"></p>
+            <button id="messageBoxClose">Aceptar</button>
+        </div>
+    </div>
+    <script>
+        const canvas = document.getElementById('zenCanvas');
+        const ctx = canvas.getContext('2d');
+        const canvasArea = document.getElementById('canvas-area');
+
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+        let brushSize = 5;
+        let sandColor = '#fef08a'; // Color de la arena
+        let strokeColor = '#d97706'; // Color del trazo en la arena (marrón-naranja)
+
+        const rocks = [];
+        let activeRock = null; // Roca actualmente arrastrándose
+
+        // Función para mostrar mensajes
+        function showMessageBox(title, content) {
+            document.getElementById('messageBoxTitle').innerText = title;
+            document.getElementById('messageBoxContent').innerText = content;
+            document.getElementById('messageBoxOverlay').classList.remove('hidden');
+        }
+
+        document.getElementById('messageBoxClose').addEventListener('click', () => {
+            document.getElementById('messageBoxOverlay').classList.add('hidden');
+        });
+
+        // Inicializar el canvas para que sea responsive
+        function resizeCanvas() {
+            // Get the computed style of the canvasArea to determine available width
+            const style = window.getComputedStyle(canvasArea);
+            const paddingX = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+            const paddingY = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
+
+            const containerWidth = canvasArea.clientWidth - paddingX;
+            const containerHeight = window.innerHeight * 0.6;
+
+            canvas.width = containerWidth;
+            canvas.height = containerHeight;
+
+            // Redibujar la arena y los trazos si existen
+            drawSand();
+        }
+
+        // Dibuja el fondo de arena
+        function drawSand() {
+            ctx.fillStyle = sandColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Función para manejar el inicio del dibujo
+        function startDrawing(e) {
+            isDrawing = true;
+            [lastX, lastY] = getCanvasCoordinates(e);
+        }
+
+        // Función para dibujar
+        function draw(e) {
+            if (!isDrawing) return;
+
+            // Si hay una roca activa, no dibujamos
+            if (activeRock) return;
+
+            e.preventDefault(); // Evitar desplazamiento en móviles
+            const [currentX, currentY] = getCanvasCoordinates(e);
+
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = brushSize;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(currentX, currentY);
+            ctx.stroke();
+
+            [lastX, lastY] = [currentX, currentY];
+        }
+
+        // Función para finalizar el dibujo
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        // Obtener coordenadas relativas al canvas
+        function getCanvasCoordinates(e) {
+            const rect = canvas.getBoundingClientRect();
+            let clientX, clientY;
+
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+
+            return [
+                clientX - rect.left,
+                clientY - rect.top
+            ];
+        }
+
+        // Event listeners para el dibujo en la arena
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing); // Detener dibujo si el mouse sale del canvas
+
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDrawing);
+        canvas.addEventListener('touchcancel', stopDrawing);
+
+        // Limpiar la arena
+        document.getElementById('clearCanvas').addEventListener('click', () => {
+            drawSand();
+            showMessageBox('Arena Limpiada', '¡El lienzo de arena ha sido limpiado! Puedes empezar de nuevo.');
+        });
+
+        // Manejo de rocas
+        function createRock(size) {
+            const rock = document.createElement('div');
+            rock.classList.add('draggable-rock', size);
+            rock.style.left = `${Math.random() * (canvas.width - 100)}px`; // Posición inicial aleatoria
+            rock.style.top = `${Math.random() * (canvas.height - 100)}px`;
+            // Asegurarse de que las rocas se agreguen al mismo contenedor que el canvas
+            canvasArea.appendChild(rock);
+
+            let isDragging = false;
+            let currentX;
+            let currentY;
+            let initialX;
+            let initialY;
+            let xOffset = 0;
+            let yOffset = 0;
+
+            function dragStart(e) {
+                e.preventDefault();
+                activeRock = rock; // Marcar esta roca como activa
+                isDragging = true;
+                if (e.type === "touchstart") {
+                    initialX = e.touches[0].clientX - xOffset;
+                    initialY = e.touches[0].clientY - yOffset;
+                } else {
+                    initialX = e.clientX - xOffset;
+                    initialY = e.clientY - yOffset;
+                }
+            }
+
+            function dragEnd() {
+                activeRock = null; // Desmarcar la roca activa
+                isDragging = false;
+            }
+
+            function drag(e) {
+                if (isDragging && activeRock === rock) {
+                    e.preventDefault();
+                    if (e.type === "touchmove") {
+                        currentX = e.touches[0].clientX - initialX;
+                        currentY = e.touches[0].clientY - initialY;
+                    } else {
+                        currentX = e.clientX - initialX;
+                        currentY = e.clientY - initialY;
+                    }
+
+                    xOffset = currentX;
+                    yOffset = currentY;
+
+                    setTranslate(currentX, currentY, rock);
+                }
+            }
+
+            function setTranslate(xPos, yPos, el) {
+                el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+            }
+
+            rock.addEventListener('mousedown', dragStart);
+            rock.addEventListener('mouseup', dragEnd);
+            canvasArea.addEventListener('mousemove', drag); // Mover el listener a canvasArea para capturar movimientos fuera de la roca
+            rock.addEventListener('touchstart', dragStart);
+            rock.addEventListener('touchend', dragEnd);
+            canvasArea.addEventListener('touchmove', drag); // Mover el listener a canvasArea para capturar movimientos fuera de la roca
+
+            // Al hacer clic en una roca, eliminarla
+            rock.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evitar que el clic se propague al canvas
+                if (!isDragging) { // Solo eliminar si no estamos arrastrando
+                    rock.remove();
+                }
+            });
+
+            rocks.push(rock);
+        }
+
+        document.getElementById('addSmallRock').addEventListener('click', () => createRock('small'));
+        document.getElementById('addMediumRock').addEventListener('click', () => createRock('medium'));
+        document.getElementById('addLargeRock').addEventListener('click', () => createRock('large'));
+
+        // Reiniciar el jardín
+        document.getElementById('resetGarden').addEventListener('click', () => {
+            drawSand();
+            // Eliminar todas las rocas existentes
+            while (rocks.length > 0) {
+                const rock = rocks.pop();
+                rock.remove();
+            }
+            showMessageBox('Jardín Reiniciado', '¡Tu jardín ha sido restaurado! Puedes crear uno nuevo.');
+        });
+
+        // Initial setup
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        drawSand(); // Dibuja la arena por primera vez
+    </script>
+</body>
+</html>

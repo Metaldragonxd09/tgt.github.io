@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The Good Thinking</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="ayuda.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #b32aff, #4ac9d6); /* Fondo degradado */
+        }
+
+        /* Navigation Bar */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #000;
+            padding: 1rem 0;
+            display: flex;
+            justify-content: flex-end; /* Alineación a la derecha */
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-right: 2rem; /* Espacio a la derecha */
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #b32aff;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 8rem auto 3rem; /* Aumentar el margen superior para bajar el cuadro */
+            padding: 6rem; /* Aumentar el padding del cuadro */
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 24px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            min-height: 700px; /* Aumentar la altura mínima del cuadro */
+            opacity: 0; /* Inicialmente oculto para la animación */
+            transform: translateY(20px); /* Desplazamiento inicial */
+            animation: fadeIn 0.6s forwards; /* Animación de aparición */
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1; /* Hacer visible */
+                transform: translateY(0); /* Regresar a la posición original */
+            }
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem); /* Aumentar el tamaño del título */
+            color: #6400a7;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        p {
+            font-size: clamp(1.5rem, 2.5vw, 2rem); /* Aumentar el tamaño del texto */
+            color: #333;
+            padding: 1.5rem 2rem; /* Aumentar el padding del texto */
+            text-align: center;
+            margin: 1.8rem 0;
+            line-height: 1.8;
+            letter-spacing: 0.01em;
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            border-radius: 12px;
+        }
+
+        /* Social Media Footer */
+        .social-footer {
+            padding: 2rem;
+            margin-top: 4rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 5rem; /* Espacio entre los enlaces de redes sociales */
+            margin: 1rem 0;
+        }
+
+        .social-link {
+            color: white;
+            font-size: 1.8rem; /* Aumentar el tamaño de las letras de redes sociales */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: #b32aff;
+        }
+    </style>
+</head>
+<body>
+    <div class="relative min-h-screen overflow-hidden">
+        <nav class="nav-bar">
+            <div class="nav-links">
+                <a href="Inicio.html" class="nav-link">Inicio</a>
+                <a href="Nosotros.html" class="nav-link">Sobre Nosotros</a>
+                <a href="necesitas.html" class="nav-link">¿Necesitas Ayuda?</a>
+            </div>
+        </nav>
+        <main class="flex-grow flex flex-col justify-center items-center text-center px-4 sm:px-0">
+            <div class="animate-fade-in bg-white rounded-lg shadow-lg p-6 max-w-2xl">
+                <h1 class="section-title">¿Necesitas Ayuda?</h1>
+                <p class="text-lg mb-4">Contacta a los siguientes medios: 131 - Para consultas en el sistema público. 
+                </br>
+                Licda. Karla Escobar Ramirez, Psicóloga Clínica.
+            </br>
+            Lunes a viernes de 5:00 a.m. a 9:00 p.m. 
+        </br>
+            Presencial: Sábados y domingos de 9:00 a 3:00. 
+        </br>
+        Teléfono: 71407230. Correo electrónico: <a href="mailto:kmescobar@gmail.com" class="text-[#b32aff]">kmescobar@gmail.com</a>.</p>
+            </div>
+        </main>
+        <footer class="social-footer">
+            <div class="social-links">
+                <a class="social-link" href="https://www.instagram.com/cdbthegoodthinking" target="_blank">Instagram</a>
+                <a class="social-link" href="https://www.tiktok.com/@the.good.thinking" target="_blank">TikTok</a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

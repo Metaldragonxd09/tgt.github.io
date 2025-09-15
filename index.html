@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The Good Thinking</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="estilos.css" rel="stylesheet">
+    <style>
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #b32aff; /* Color al pasar el mouse */
+        }
+
+        .social-links {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .social-link {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            margin-right: 1rem; /* Espaciado entre los enlaces */
+            transition: color 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: #b32aff; /* Color al pasar el mouse */
+        }
+
+        /* Estilos para aumentar el tamaño de los textos */
+        .main-title {
+            font-size: 3.5rem; /* Tamaño de letra más grande para el título */
+        }
+
+        .highlight-text {
+            font-size: 4rem; /* Tamaño de letra mucho más grande para el texto destacado */
+        }
+
+        .button-text {
+            font-size: 1.2rem; /* Tamaño de letra más pequeño para el texto del botón */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* Centrar los botones */
+            gap: 3rem; /* Espaciado entre los botones */
+            margin-top: 5rem; /* Aumentar el margen superior para bajar los botones */
+        }
+
+        .button {
+            padding: 0.8rem 1.5rem; /* Aumentar el tamaño del botón */
+            background-color: #6a0dad; /* Color morado */
+            color: white; /* Color del texto del botón */
+            border: none; /* Sin borde */
+            border-radius: 0.5rem; /* Bordes redondeados */
+            font-weight: bold; /* Hacer el texto del botón más grueso */
+            cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
+        }
+
+        .button a {
+            color: white; /* Color del texto del enlace en el botón */
+            text-decoration: none; /* Sin subrayado */
+        }
+    </style>
+</head>
+<body>
+    <div class="relative min-h-screen bg-gradient-to-r from-[#b32aff] via-[#4ac9d6] to-[#005ea8] overflow-hidden">
+        <div class="diagonal-top-left"></div>
+        <div class="triangle-bottom-left"></div>
+        <nav class="bg-black flex justify-end space-x-6 p-6 text-sm font-semibold">
+            <a href="Inicio.html" class="underline">Inicio</a>
+            <a href="Nosotros.html" class="underline">Sobre Nosotros</a>
+            <a href="necesitas.html" class="underline">¿Necesitas Ayuda?</a>
+        </nav>
+        <main class="flex flex-col items-center justify-center text-center px-6 sm:px-12 md:px-20 lg:px-32 xl:px-48 mt-20 text-white">
+            <p class="main-title font-semibold leading-tight max-w-3xl">
+                El mejor servicio de Salud Mental a tu alcance
+            </p>
+            <p class="highlight-text mt-4 text-xs sm:text-sm max-w-xl">
+                Las visitas a otros centros médicos demoran más de lo usual.
+                <br />
+                En The Good Thinking somos la clave para cuidar tu salud y priorizar tu
+                bienestar mental
+            </p>
+            <br />
+            <div class="button-container">
+                <button class="button">
+                    <a href="formulario/index.html"> Haz clic para descubrir si posees algún trastorno o enfermedad mental </a>
+                </button>
+                <button class="button">
+                    <a href="trastornos.html">Clic aquí para conocer más sobre trastornos y enfermedades mentales</a>
+                </button>
+            </div>
+        </main>
+        <div>
+            <p class="Introducción-text mt-8 max-w-2xl">
+                En The Good Thinking, nos dedicamos a ofrecer servicios de salud mental
+                accesibles y de alta calidad. Ya sea que estés buscando terapia individual, asesoramiento
+                o recursos educativos, estamos aquí para ayudarte en cada paso del camino.
+            </p>
+        </br>
+        <img ult="Imagen de salud mental" class="mx-auto my-4 rounded-lg shadow-lg max-w-full h-auto" src="data:image/png;base64,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">
+        <p class="Titulo-text mt-2 max-w-2xl">
+            ¿Porque elegirnos?
+        </p>
+        </br>
+        <p class="contexto-text mt-2 max-w-2xl">
+            En The Good Thinking, nos enorgullece ofrecer servicios de salud mental que se
+            destacan por su accesibilidad, calidad y enfoque centrado en el paciente. Aquí
+            hay algunas razones clave por las que deberías elegirnos:
+        </p>
+        </br>
+        <p class="contexto-text mt-2 max-w-2xl">
+            1. Accesibilidad: Entendemos que la salud mental es una prioridad y nos
+            esforzamos por hacer que nuestros servicios sean accesibles para todos. Ofrecemos
+            opciones de citas flexibles, incluyendo sesiones en línea, para adaptarnos a tu
+            horario y necesidades.
+            </br>
+            </br>
+            2. Información y Educación: Nos comprometemos a proporcionar recursos educativos y
+            materiales informativos para ayudarte a comprender mejor tu salud mental y las dificultades
+            que puedas estar enfrentando. Creemos que la educación es clave para el bienestar a largo plazo.
+            </br>
+            </br>
+            3. Enfoque Centrado en el Paciente: Cada persona es única, y adaptamos nuestros servicios para satisfacer tus necesidades individuales.
+            Trabajamos contigo para desarrollar un plan de tratamiento personalizado que se alinee con tus objetivos y preferencias.
+            </br>
+            </br>
+            4. Contactos de Emergencia: En situaciones de crisis, sabemos lo importante que es tener acceso rápido a ayuda. Proporcionamos contactos de emergencia y recursos para que puedas obtener apoyo inmediato cuando lo necesites.
+        </p>
+        </div>
+        <div class="social-links">
+            <a class="social-link" href="https://www.instagram.com/cdbthegoodthinking">Instagram</a>
+            <a class="social-link" href="https://www.tiktok.com/@the.good.thinking">TikTok</a>
+        </div>
+        <a href="minijuego.html" class="absolute bottom-5 right-5 bg-white text-black px-4 py-2 rounded-full shadow-lg hover:bg-gray-200 transition">
+            Minijuego Sorpresa</a>
+    </div>
+</body>
+</html>
